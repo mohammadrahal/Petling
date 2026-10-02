@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="en" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_blank" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&amp;family=Rubik:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "primary-fixed-dim": "#ffb59e",
+          "surface-container-high": "#eae7e7",
+          "tertiary": "#725c00",
+          "on-secondary": "#ffffff",
+          "on-surface-variant": "#55433d",
+          "on-secondary-container": "#00587d",
+          "tertiary-container": "#c5a327",
+          "surface-container": "#f0eded",
+          "on-tertiary-fixed": "#231b00",
+          "on-tertiary-fixed-variant": "#564500",
+          "secondary-fixed": "#c7e7ff",
+          "outline": "#88726c",
+          "tertiary-fixed-dim": "#e8c346",
+          "error": "#ba1a1a",
+          "surface-tint": "#99462b",
+          "surface": "#fcf9f8",
+          "error-container": "#ffdad6",
+          "on-primary-container": "#6c250c",
+          "primary-container": "#f28b6b",
+          "surface-container-low": "#f6f3f2",
+          "on-primary-fixed-variant": "#7a2f16",
+          "surface-dim": "#dcd9d9",
+          "on-secondary-fixed": "#001e2e",
+          "inverse-primary": "#ffb59e",
+          "surface-container-highest": "#e4e2e1",
+          "primary-fixed": "#ffdbd0",
+          "on-secondary-fixed-variant": "#004c6d",
+          "on-tertiary-container": "#493a00",
+          "on-primary": "#ffffff",
+          "surface-bright": "#fcf9f8",
+          "inverse-surface": "#303030",
+          "secondary-container": "#86cfff",
+          "on-surface": "#1b1c1c",
+          "surface-variant": "#e4e2e1",
+          "tertiary-fixed": "#ffe081",
+          "secondary": "#00658f",
+          "outline-variant": "#dbc1ba",
+          "on-error": "#ffffff",
+          "on-background": "#1b1c1c",
+          "inverse-on-surface": "#f3f0f0",
+          "primary": "#99462b",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-fixed": "#3a0a00",
+          "on-tertiary": "#ffffff",
+          "on-error-container": "#93000a",
+          "background": "#fcf9f8",
+          "secondary-fixed-dim": "#86cfff"
+        },
+        "borderRadius": {
+          "DEFAULT": "1rem",
+          "lg": "2rem",
+          "xl": "3rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-xs": "0.5rem",
+          "space-sm": "0.75rem",
+          "space-xl": "3rem",
+          "margin": "2rem",
+          "gutter-sm": "1rem",
+          "margin-sm": "1rem",
+          "space-lg": "2rem",
+          "gutter": "1.5rem",
+          "space-md": "1.25rem"
+        },
+        "fontFamily": {
+          "label-lg": [
+            "Rubik"
+          ],
+          "body-md": [
+            "Quicksand"
+          ],
+          "label-md": [
+            "Rubik"
+          ],
+          "display-hero-mobile": [
+            "Rubik"
+          ],
+          "headline-lg": [
+            "Rubik"
+          ],
+          "headline-md": [
+            "Rubik"
+          ],
+          "body-lg": [
+            "Quicksand"
+          ],
+          "headline-lg-mobile": [
+            "Rubik"
+          ],
+          "headline-sm": [
+            "Rubik"
+          ],
+          "speech-bubble": [
+            "Quicksand"
+          ],
+          "display-hero": [
+            "Rubik"
+          ],
+          "body-xl": [
+            "Quicksand"
+          ]
+        },
+        "fontSize": {
+          "label-lg": [
+            "18px",
+            {
+              "lineHeight": "24px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-md": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "500"
+            }
+          ],
+          "label-md": [
+            "15px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.03em",
+              "fontWeight": "700"
+            }
+          ],
+          "display-hero-mobile": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "800"
+            }
+          ],
+          "headline-lg": [
+            "32px",
+            {
+              "lineHeight": "40px",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "700"
+            }
+          ],
+          "body-lg": [
+            "18px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "26px",
+            {
+              "lineHeight": "34px",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "600"
+            }
+          ],
+          "speech-bubble": [
+            "20px",
+            {
+              "lineHeight": "30px",
+              "fontWeight": "700"
+            }
+          ],
+          "display-hero": [
+            "48px",
+            {
+              "lineHeight": "56px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "800"
+            }
+          ],
+          "body-xl": [
+            "22px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface min-h-screen flex items-center justify-center p-gutter"><main class="w-full max-w-[560px] mx-auto"><div class="flex flex-col w-full">
+<div class="relative w-full overflow-hidden rounded-xl bg-secondary-container p-gutter flex flex-col justify-between min-h-[720px] shadow-xl select-none">
+<!-- Ambient subtle background decorative spots -->
+<div class="absolute -top-12 -left-12 w-48 h-48 rounded-full bg-secondary-fixed opacity-40 blur-2xl pointer-events-none"></div>
+<div class="absolute -bottom-16 -right-16 w-56 h-56 rounded-full bg-tertiary-fixed opacity-40 blur-3xl pointer-events-none"></div>
+<!-- Header Section -->
+<div class="relative z-10 flex items-center justify-between gap-space-xs w-full">
+<!-- Back Pill Button -->
+<button class="group flex items-center gap-1.5 bg-surface-container-lowest text-on-surface px-4 py-2.5 rounded-full shadow-md transition-all active:scale-95 active:shadow-sm" type="button">
+<span class="material-symbols-outlined text-secondary font-bold text-headline-sm" style="font-variation-settings: 'FILL' 1;">arrow_back_ios_new</span>
+<span class="font-label-md text-label-md text-secondary">Back</span>
+</button>
+<!-- Center Title -->
+<div class="flex items-center justify-center">
+<h1 class="font-headline-md text-headline-md text-surface-container-lowest drop-shadow-sm tracking-tight">
+          Talking with Pip
+        </h1>
+</div>
+<!-- Live Call Timer Pill -->
+<div class="flex items-center gap-2 bg-surface-container-lowest/90 px-3.5 py-2 rounded-full shadow-md">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-tertiary"></span>
+</span>
+<span class="font-label-md text-label-md text-on-surface" id="call-timer">11:03</span>
+</div>
+</div>
+<!-- Center Stage: Speech Bubble & Pip Creature -->
+<div class="relative z-10 flex flex-col items-center my-auto w-full max-w-[440px] mx-auto pt-space-xs">
+<!-- Kid-Friendly Speech Bubble -->
+<div class="relative w-full bg-surface-container-lowest rounded-lg p-space-md shadow-lg transition-transform hover:scale-[1.02] duration-300">
+<div class="flex items-start gap-space-xs">
+<div class="bg-secondary-fixed p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+</div>
+<div class="flex-1">
+<p class="font-speech-bubble text-speech-bubble text-on-surface leading-snug">
+              How do you say <span class="bg-tertiary-fixed text-on-tertiary-fixed px-2.5 py-0.5 rounded-full inline-block font-bold">cat</span> in Arabic?
+            </p>
+</div>
+</div>
+<!-- Bubble Pointer Triangle (downward) -->
+<div class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-t-[14px] border-t-surface-container-lowest"></div>
+</div>
+<!-- Pip's Big Sunny Yellow Avatar Stage -->
+<div class="relative mt-6 flex items-center justify-center">
+<!-- Sunbeam ambient aura ring -->
+<div class="absolute w-56 h-56 rounded-full bg-tertiary-fixed animate-pulse opacity-60 blur-md"></div>
+<!-- Big Sunny Yellow Base Circle -->
+<div class="relative w-48 h-48 rounded-full bg-tertiary-fixed flex items-center justify-center shadow-lg border-[6px] border-surface-container-lowest/80 overflow-hidden transform hover:rotate-2 transition-transform duration-300">
+<img alt="Pip companion" class="object-contain drop-shadow-md select-none pointer-events-none transform transition-transform duration-200 w-full h-full" id="pip-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIt9xB2Cg1_YuKvY9OBCEYE-yC-c5V9gxSuZJUwRBdte4IBiclviUJxVv9o5cVYa0d_uK5qoHH1MyZ2mQ2KGscW7Vqpa35MykgeUqw6vlajpTt7aFRonGiA8a46UlB8Ggpxd9tGY2PK_PPVP4hmrEeEXwnCJfd82sMTClLrK4MSYR3e4FUVoCXQ5WY_skRLgX2cupbT1dwkHmZlj2cYgItvtqZFZnYrVhh3sgURiU-o_pgiVJ4nlh6">
+</div>
+<!-- Floating playful emotion badge -->
+<div class="absolute -top-1 -right-2 bg-surface-container-lowest p-2 rounded-full shadow-md flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-headline-sm" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<!-- Pip Listening State & Audio Visualizer -->
+<div class="flex flex-col items-center mt-5 w-full">
+<div class="flex items-center gap-2 mb-3">
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest drop-shadow-sm" id="status-text">You're speaking! 🌟</span>
+</div>
+<!-- Animated Sound Wave (9 rounded vertical bars) -->
+<div class="flex items-center justify-center gap-1.5 h-10 w-full" id="wave-container">
+<span class="w-2 rounded-full bg-surface-container-lowest transition-all duration-150 h-3 animate-pulse" style="animation-delay: 0.1s; height: 36px;"></span>
+<span class="w-2 rounded-full bg-surface-container-lowest transition-all duration-150 h-6 animate-pulse" style="animation-delay: 0.25s; height: 26px;"></span>
+<span class="w-2 rounded-full bg-surface-container-lowest transition-all duration-150 h-8 animate-pulse" style="animation-delay: 0.4s; height: 33px;"></span>
+<span class="w-2 rounded-full bg-surface-container-lowest transition-all duration-150 h-10 animate-pulse" style="animation-delay: 0.15s; height: 28px;"></span>
+<span class="w-2 rounded-full bg-surface-container-lowest transition-all duration-150 h-5 animate-pulse" style="animation-delay: 0.3s; height: 14px;"></span>
+<span class="w-2 rounded-full bg-surface-container-lowest transition-all duration-150 h-9 animate-pulse" style="animation-delay: 0.5s; height: 19px;"></span>
+<span class="w-2 rounded-full bg-surface-container-lowest transition-all duration-150 h-7 animate-pulse" style="animation-delay: 0.2s; height: 17px;"></span>
+<span class="w-2 rounded-full bg-surface-container-lowest transition-all duration-150 h-4 animate-pulse" style="animation-delay: 0.35s; height: 20px;"></span>
+<span class="w-2 rounded-full bg-surface-container-lowest transition-all duration-150 h-2 animate-pulse" style="animation-delay: 0.05s; height: 21px;"></span>
+</div>
+</div>
+</div>
+<!-- Bottom Controls & Stats Section -->
+<div class="relative z-10 flex flex-col gap-5 w-full pt-space-xs">
+<!-- Primary Voice Control Center -->
+<div class="flex items-center justify-center gap-5 sm:gap-8 w-full">
+<!-- Left Button: Hint -->
+<div class="flex flex-col items-center gap-1.5">
+<button aria-label="Get a hint" class="w-16 h-16 rounded-full bg-tertiary-fixed text-on-tertiary-fixed shadow-md flex items-center justify-center transition-all active:scale-90 hover:brightness-105" id="hint-btn" type="button">
+<span class="material-symbols-outlined text-headline-md" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+</button>
+<span class="font-label-md text-label-md text-surface-container-lowest font-bold">Hint</span>
+</div>
+<!-- Center Button: Extra-Large Coral Push-to-Talk -->
+<div class="flex flex-col items-center gap-1.5 -translate-y-2">
+<div class="relative flex items-center justify-center">
+<div class="absolute -inset-2.5 rounded-full opacity-40 animate-ping pointer-events-none bg-tertiary-fixed" id="mic-pulse"></div>
+<button aria-label="Talk with Pip" class="relative w-24 h-24 rounded-full bg-primary-container text-on-primary shadow-xl border-4 border-surface-container-lowest flex items-center justify-center transition-all active:scale-95 active:shadow-inner" id="mic-btn" type="button">
+<span class="material-symbols-outlined text-display-hero text-on-primary" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+</div>
+<span class="font-label-lg text-label-lg text-surface-container-lowest font-bold mt-1">Talk</span>
+</div>
+<!-- Right Button: Soft Red Hangup -->
+<div class="flex flex-col items-center gap-1.5">
+<button aria-label="End Call" class="w-16 h-16 rounded-full bg-error text-on-error shadow-md flex items-center justify-center transition-all active:scale-90 hover:brightness-105" id="end-btn" type="button">
+<span class="material-symbols-outlined text-headline-md" style="font-variation-settings: 'FILL' 1;">call_end</span>
+</button>
+<span class="font-label-md text-label-md text-surface-container-lowest font-bold">End</span>
+</div>
+</div>
+<!-- Gamified Bottom Badges -->
+<div class="flex items-center justify-between gap-space-xs w-full pt-1">
+<!-- Bottom Left Pill: Pip Snack Food Counter -->
+<div class="flex items-center gap-2 bg-surface-container-lowest/90 px-3.5 py-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-primary-container text-body-lg" style="font-variation-settings: 'FILL' 1;">cookie</span>
+<span class="font-label-md text-label-md text-on-surface">+3 food for Pip</span>
+</div>
+<!-- Bottom Right Pill: Words Count -->
+<div class="flex items-center gap-2 bg-surface-container-lowest/90 px-3.5 py-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-tertiary text-body-lg" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-md text-label-md text-on-surface">Words today: 8</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Dynamic simulated timer
+    let seconds = 192;
+    const timerElem = document.getElementById('call-timer');
+    if (timerElem) {
+      setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const remSecs = seconds % 60;
+        timerElem.textContent = `${String(mins).padStart(2, '0')}:${String(remSecs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    // Micro-interaction for Voice button toggling
+    const micBtn = document.getElementById('mic-btn');
+    const micPulse = document.getElementById('mic-pulse');
+    const statusText = document.getElementById('status-text');
+    const waveBars = document.querySelectorAll('#wave-container span');
+    let isSpeaking = false;
+
+    if (micBtn && statusText) {
+      micBtn.addEventListener('click', () => {
+        isSpeaking = !isSpeaking;
+        if (isSpeaking) {
+          statusText.textContent = "You're speaking! 🌟";
+          micPulse.classList.add('bg-tertiary-fixed');
+          micPulse.classList.remove('bg-primary-container');
+          waveBars.forEach(b => {
+            b.classList.remove('opacity-50');
+            b.style.height = `${Math.floor(Math.random() * 28 + 12)}px`;
+          });
+        } else {
+          statusText.textContent = "Pip is listening...";
+          micPulse.classList.add('bg-primary-container');
+          micPulse.classList.remove('bg-tertiary-fixed');
+        }
+      });
+    }
+
+    // Subtle Pip bounce on hint
+    const hintBtn = document.getElementById('hint-btn');
+    const pipAvatar = document.getElementById('pip-avatar');
+    if (hintBtn && pipAvatar) {
+      hintBtn.addEventListener('click', () => {
+        pipAvatar.classList.add('-translate-y-3', 'scale-110');
+        setTimeout(() => {
+          pipAvatar.classList.remove('-translate-y-3', 'scale-110');
+        }, 300);
+      });
+    }
+  })();
+</script></main>
+
+</body></html>
