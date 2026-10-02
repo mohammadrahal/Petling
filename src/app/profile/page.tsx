@@ -94,7 +94,7 @@ export default function UserProfileScreen() {
                     lineHeight: 1.15,
                   }}
                 >
-                  Sara
+                  Rahal
                 </h1>
                 <div
                   style={{
@@ -511,7 +511,7 @@ export default function UserProfileScreen() {
                     Weekly report by email
                   </div>
                   <div style={{ fontSize: "0.85rem", color: "#64748B", fontWeight: 600 }}>
-                    Receive Sara&apos;s vocabulary & math summary every Sunday
+                    Receive Rahal&apos;s vocabulary & math summary every Sunday
                   </div>
                 </div>
 

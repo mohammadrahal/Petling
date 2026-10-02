@@ -97,7 +97,7 @@ export default function UpgradeScreen() {
               opacity: 0.85,
             }}
           >
-            Sara finished 20 lessons. Now Pip is ready for real conversations.
+            Rahal finished 20 lessons. Now Pip is ready for real conversations.
           </p>
         </div>
 
@@ -134,7 +134,7 @@ export default function UpgradeScreen() {
                 textAlign: "center",
               }}
             >
-              Hi Sara! I can talk now! ✨
+              Hi Rahal! I can talk now! ✨
               {/* Bubble tail */}
               <div
                 style={{
@@ -344,7 +344,7 @@ export default function UpgradeScreen() {
             {/* Big Coral Pill Button */}
             <button
               onClick={() =>
-                alert("🎉 Talking unlocked! Pip can now have real voice conversations with Sara.")
+                alert("🎉 Talking unlocked! Pip can now have real voice conversations with Rahal.")
               }
               className="btn-pill btn-coral"
               style={{

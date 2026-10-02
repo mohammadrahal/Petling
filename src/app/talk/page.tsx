@@ -53,7 +53,7 @@ export default function TalkScreen() {
       question: "How do you say 'cat' in Arabic?",
       expectedKeywords: ["qittah", "qitta", "kitta", "kittah", "gitta", "قطة", "cat"],
       hint: "It sounds like 'Qit-tah'! Try saying Qittah!",
-      successFeedback: "Yay! That's right! 'Qittah' (قطة) means cat! Great job Sara! 🍓",
+      successFeedback: "Yay! That's right! 'Qittah' (قطة) means cat! Great job Rahal! 🍓",
       options: [
         { text: "Qittah", label: 'Say "Qittah!"', emoji: "🐱" },
         { text: "Kittah", label: 'Say "Kittah!"', emoji: "🐾" },
@@ -75,7 +75,7 @@ export default function TalkScreen() {
       question: "How do you say 'Thank you' in Arabic?",
       expectedKeywords: ["shukran", "shoukran", "shokran", "شكرا", "شكراً"],
       hint: "It starts with Sh... 'Shuk-ran'!",
-      successFeedback: "Shukran! That's wonderful manners, Sara! 🍓",
+      successFeedback: "Shukran! That's wonderful manners, Rahal! 🍓",
       options: [
         { text: "Shukran", label: 'Say "Shukran!"', emoji: "🙏" },
         { text: "Shuk-ran", label: 'Say "Shuk-ran!"', emoji: "✨" },
@@ -86,7 +86,7 @@ export default function TalkScreen() {
       question: "What sound does a friendly lion make?",
       expectedKeywords: ["roar", "rawr"],
       hint: "It's a big loud ROAAAR!",
-      successFeedback: "ROAAAR! You're a brave little lion, Sara! 🍓",
+      successFeedback: "ROAAAR! You're a brave little lion, Rahal! 🍓",
       options: [
         { text: "Roar!", label: 'Say "Roar!"', emoji: "🦁" },
         { text: "Rawr!", label: 'Say "Rawr!"', emoji: "👑" },

@@ -85,7 +85,7 @@ export default function DashboardScreen() {
             </div>
             <div>
               <h1 className="font-headline font-extrabold text-2xl sm:text-4xl text-on-surface tracking-tight">
-                Hi Sara! <span className="text-primary-container">{pet.name} missed you.</span>
+                Hi Rahal! <span className="text-primary-container">{pet.name} missed you.</span>
               </h1>
               <p className="font-body text-on-surface-variant text-sm sm:text-lg font-medium">
                 Ready for today's magical learning adventures?
