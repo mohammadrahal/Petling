@@ -1,678 +1,421 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import Pip from "@/components/Pip";
+import ParentNav from "@/components/ParentNav";
+import CompanionStage from "@/components/CompanionStage";
+import SubjectIcon from "@/components/SubjectIcon";
+import {
+  Abacus,
+  Book,
+  Check,
+  Clock,
+  Flame,
+  Globe,
+  Lock,
+  Mail,
+  Shield,
+  Speech,
+  Star,
+} from "@/components/Icons";
+import { useCompanion, useSettings } from "@/lib/companion-store";
 
-export default function UserProfileScreen() {
-  const [talkLimit, setTalkLimit] = useState(15);
-  const [emailReport, setEmailReport] = useState(true);
-  const [showCustomizeModal, setShowCustomizeModal] = useState(false);
-  const [petName, setPetName] = useState("Pip");
+/** Nothing is wired to an account, so the figures live here and say so. */
+const SAMPLE = {
+  childName: "Mira",
+  age: 5,
+  stage: "Baby",
+  level: 2,
+  streakDays: 7,
+  wordsLearned: 142,
+  stars: 18,
+  week: [
+    { day: "Mon", short: "M", lessons: 3 },
+    { day: "Tue", short: "T", lessons: 4 },
+    { day: "Wed", short: "W", lessons: 2 },
+    { day: "Thu", short: "T", lessons: 5 },
+    { day: "Fri", short: "F", lessons: 3 },
+    { day: "Sat", short: "S", lessons: 4 },
+    { day: "Sun", short: "S", lessons: 1 },
+  ],
+};
 
-  const badges = [
-    { name: "First word", icon: "💬", bg: "var(--pastel-pink)", locked: false },
-    { name: "5 day streak", icon: "🔥", bg: "var(--sunny-yellow)", locked: false },
-    { name: "Counted to 20", icon: "🔢", bg: "var(--pastel-mint)", locked: false },
-    { name: "10 lessons", icon: "⭐", bg: "var(--pastel-lavender)", locked: false },
-    { name: "Pip talks", icon: "🔒", bg: "#E2E8F0", locked: true },
-  ];
+const BADGES = [
+  { Icon: Speech, label: "Said a first word", earned: true },
+  { Icon: Flame, label: "Five days in a row", earned: true },
+  { Icon: Abacus, label: "Counted to twenty", earned: true },
+  { Icon: Star, label: "Ten lessons finished", earned: true },
+  { Icon: Book, label: "Read a whole story", earned: false },
+];
 
-  // Daily lesson bar chart data (Mon to Sun)
-  const weekData = [
-    { day: "Mon", lessons: 3, height: "60%" },
-    { day: "Tue", lessons: 4, height: "80%" },
-    { day: "Wed", lessons: 2, height: "40%" },
-    { day: "Thu", lessons: 5, height: "100%" },
-    { day: "Fri", lessons: 3, height: "60%" },
-    { day: "Sat", lessons: 4, height: "80%" },
-    { day: "Sun", lessons: 1, height: "25%" },
-  ];
+export default function ProfilePage() {
+  const companion = useCompanion();
+  // Each change is written straight to storage, which is what makes the
+  // "Saved" note at the end of the form true.
+  const [settings, update] = useSettings();
+
+  const weekTotal = SAMPLE.week.reduce((sum, d) => sum + d.lessons, 0);
+  const busiest = SAMPLE.week.reduce((a, b) => (b.lessons > a.lessons ? b : a));
+  const scaleMax = Math.max(...SAMPLE.week.map((d) => d.lessons));
 
   return (
-    <div
-      style={{
-        backgroundColor: "var(--mint-light)",
-        flex: 1,
-        padding: "3rem 2.5rem",
-        minHeight: "calc(100vh - 84px)",
-      }}
-    >
-      <div style={{ maxWidth: "1240px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "2.5rem" }}>
-        {/* Top Section: Kid Profile Card + This Week Card in a Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1.45fr 1fr",
-            gap: "2.5rem",
-            alignItems: "stretch",
-          }}
-        >
-          {/* Kid Profile Card (White, Rounded) */}
-          <div
-            style={{
-              backgroundColor: "#FFFFFF",
-              border: "var(--border-thick)",
-              borderRadius: "36px",
-              padding: "2.25rem",
-              boxShadow: "var(--shadow-playful)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "2rem",
-            }}
-          >
-            {/* Left Kid Info */}
-            <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-              {/* Big Round Avatar with "S" */}
-              <div
-                style={{
-                  width: "90px",
-                  height: "90px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--lavender)",
-                  border: "var(--border-thick)",
-                  color: "#FFFFFF",
-                  fontSize: "3rem",
-                  fontWeight: 900,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 6px 0 rgba(43, 43, 43, 0.15)",
-                }}
-              >
-                S
+    <>
+      <ParentNav />
+
+      <div className="mx-auto max-w-shelf px-5 py-14">
+        <header className="max-w-measure">
+          <h1 className="font-display text-4xl font-extrabold text-ink">
+            {SAMPLE.childName}&rsquo;s progress
+          </h1>
+          <p className="mt-3 text-ink-soft">
+            Age {SAMPLE.age} · practising with {companion.name}, {SAMPLE.stage}{" "}
+            stage {SAMPLE.level}
+          </p>
+          <p className="mt-4 text-sm text-ink-soft">
+            Showing sample progress. The limits and preferences below are real and
+            are saved in this browser.
+          </p>
+        </header>
+
+        <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_18rem] lg:gap-16">
+          <div>
+            {/*
+              One series over seven ordinal days, so: one hue, no legend (the
+              caption names the series), only the busiest day labelled rather
+              than a number on every bar, and a table underneath for anyone who
+              cannot read the bars.
+            */}
+            <section aria-labelledby="week-heading">
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <h2
+                  id="week-heading"
+                  className="font-display text-2xl font-bold text-ink"
+                >
+                  This week
+                </h2>
+                <p className="text-sm text-ink-soft">
+                  {weekTotal} lessons finished
+                </p>
               </div>
 
-              <div>
-                <h1
-                  style={{
-                    fontSize: "2.5rem",
-                    fontWeight: 900,
-                    color: "var(--dark-text)",
-                    lineHeight: 1.15,
-                  }}
-                >
-                  Rahal
-                </h1>
-                <div
-                  style={{
-                    fontSize: "1.2rem",
-                    fontWeight: 800,
-                    color: "#64748B",
-                    marginBottom: "0.75rem",
-                  }}
-                >
-                  7 years old
+              <figure className="mt-6">
+                <div className="flex h-40 items-end gap-0.5">
+                  {SAMPLE.week.map((d) => {
+                    const isBusiest = d.day === busiest.day;
+                    return (
+                      <div
+                        key={d.day}
+                        className="group relative flex h-full flex-1 flex-col justify-end"
+                      >
+                        {isBusiest && (
+                          <p className="mb-1 text-center font-display text-sm font-bold text-ink">
+                            {d.lessons}
+                          </p>
+                        )}
+
+                        <div
+                          className="w-full rounded-t-[4px] bg-leaf-mark"
+                          style={{
+                            height: `${(d.lessons / scaleMax) * 100}%`,
+                          }}
+                        />
+
+                        {/* Per-bar hover value, since only one bar is labelled. */}
+                        <p className="pointer-events-none absolute bottom-full left-1/2 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-ink px-2 py-1 text-xs text-shell opacity-0 transition-opacity group-hover:opacity-100">
+                          {d.day}: {d.lessons}
+                        </p>
+                      </div>
+                    );
+                  })}
                 </div>
 
-                {/* Learning Languages Pills */}
-                <div style={{ display: "flex", gap: "0.6rem" }}>
-                  <span
-                    style={{
-                      backgroundColor: "var(--sky-blue)",
-                      border: "var(--border-soft)",
-                      borderRadius: "9999px",
-                      padding: "0.3rem 0.9rem",
-                      fontSize: "0.95rem",
-                      fontWeight: 800,
-                      color: "var(--dark-text)",
-                    }}
-                  >
-                    🇬🇧 English
-                  </span>
-                  <span
-                    style={{
-                      backgroundColor: "var(--sunny-yellow)",
-                      border: "var(--border-soft)",
-                      borderRadius: "9999px",
-                      padding: "0.3rem 0.9rem",
-                      fontSize: "0.95rem",
-                      fontWeight: 800,
-                      color: "var(--dark-text)",
-                    }}
-                  >
-                    🌙 Arabic
-                  </span>
+                <div className="border-t border-shell-edge pt-2">
+                  <div className="flex gap-0.5">
+                    {SAMPLE.week.map((d) => (
+                      <p
+                        key={d.day}
+                        className="flex-1 text-center text-xs text-ink-soft"
+                      >
+                        <span aria-hidden="true" className="sm:hidden">
+                          {d.short}
+                        </span>
+                        <span className="hidden sm:inline">{d.day}</span>
+                        <span className="sr-only">{d.day}</span>
+                      </p>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Divider */}
-            <div style={{ width: "2px", height: "100px", backgroundColor: "#E2E8F0" }} />
+                <figcaption className="mt-3 text-sm text-ink-soft">
+                  Lessons finished each day. Busiest day was {busiest.day}, with{" "}
+                  {busiest.lessons}.
+                </figcaption>
+              </figure>
 
-            {/* Right Kid Info: Small Pip + Customize Pip */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
-              }}
-            >
-              <Pip size={90} variant="normal" />
-              <div
-                style={{
-                  fontSize: "1.05rem",
-                  fontWeight: 900,
-                  color: "var(--dark-text)",
-                  margin: "0.5rem 0",
-                }}
-              >
-                {petName}, Baby stage, level 2
-              </div>
-              <button
-                onClick={() => setShowCustomizeModal(true)}
-                style={{
-                  backgroundColor: "var(--cream)",
-                  border: "var(--border-medium)",
-                  borderRadius: "9999px",
-                  padding: "0.45rem 1.15rem",
-                  fontSize: "0.95rem",
-                  fontWeight: 800,
-                  color: "var(--dark-text)",
-                  boxShadow: "0 3px 0 rgba(43, 43, 43, 0.12)",
-                }}
-              >
-                🎨 Customize Pip
-              </button>
-            </div>
-          </div>
+              <details className="mt-4">
+                <summary className="cursor-pointer text-sm font-semibold text-coral-ink underline-offset-4 hover:underline">
+                  Show as a table
+                </summary>
+                <table className="mt-3 w-full max-w-xs text-left text-sm">
+                  <caption className="sr-only">
+                    Lessons finished each day this week
+                  </caption>
+                  <thead>
+                    <tr className="border-b border-shell-edge">
+                      <th scope="col" className="py-2 font-semibold text-ink">
+                        Day
+                      </th>
+                      <th scope="col" className="py-2 font-semibold text-ink">
+                        Lessons
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {SAMPLE.week.map((d) => (
+                      <tr key={d.day} className="border-b border-shell-edge">
+                        <th scope="row" className="py-2 font-normal text-ink-soft">
+                          {d.day}
+                        </th>
+                        <td className="py-2 text-ink">{d.lessons}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </details>
 
-          {/* Right Side: "This week" Card */}
-          <div
-            style={{
-              backgroundColor: "#FFFFFF",
-              border: "var(--border-thick)",
-              borderRadius: "36px",
-              padding: "2rem",
-              boxShadow: "var(--shadow-playful)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "baseline",
-                marginBottom: "1rem",
-              }}
-            >
+              <dl className="mt-8 flex flex-wrap gap-10 border-t border-shell-edge pt-6">
+                {[
+                  { Icon: Flame, value: SAMPLE.streakDays, unit: "days in a row" },
+                  { Icon: Book, value: SAMPLE.wordsLearned, unit: "words practised" },
+                  { Icon: Star, value: SAMPLE.stars, unit: "stars this stage" },
+                ].map(({ Icon, value, unit }) => (
+                  <div key={unit}>
+                    <Icon className="size-5 text-coral-ink" />
+                    <dd className="mt-2 font-display text-3xl font-extrabold leading-none text-ink">
+                      {value}
+                    </dd>
+                    <dt className="mt-1.5 text-sm text-ink-soft">{unit}</dt>
+                  </div>
+                ))}
+              </dl>
+            </section>
+
+            <section aria-labelledby="badges-heading" className="mt-14">
               <h2
-                style={{
-                  fontSize: "1.6rem",
-                  fontWeight: 900,
-                  color: "var(--dark-text)",
-                }}
+                id="badges-heading"
+                className="font-display text-2xl font-bold text-ink"
               >
-                This week 📊
+                What {SAMPLE.childName} has earned
               </h2>
-              <span style={{ fontSize: "0.9rem", fontWeight: 800, color: "#64748B" }}>
-                22 lessons done
-              </span>
-            </div>
 
-            {/* Small Bar Chart of Lessons Mon to Sun */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "space-between",
-                height: "90px",
-                padding: "0 0.5rem 0.5rem",
-                borderBottom: "2px solid #E2E8F0",
-              }}
-            >
-              {weekData.map((d, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "4px",
-                    width: "32px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "20px",
-                      height: d.height,
-                      backgroundColor: "var(--coral)",
-                      border: "2px solid #2B2B2B",
-                      borderRadius: "6px 6px 0 0",
-                    }}
-                    title={`${d.lessons} lessons`}
-                  />
-                  <span style={{ fontSize: "0.75rem", fontWeight: 800, color: "#64748B" }}>
-                    {d.day}
-                  </span>
-                </div>
-              ))}
-            </div>
+              <ul className="mt-6 grid gap-x-10 border-t border-shell-edge sm:grid-cols-2">
+                {BADGES.map(({ Icon, label, earned }) => (
+                  <li
+                    key={label}
+                    className="flex items-center gap-3 border-b border-shell-edge py-4"
+                  >
+                    <span
+                      className={`grid size-10 shrink-0 place-items-center rounded-full ${
+                        earned ? "bg-sun-wash text-ink" : "bg-shell-edge text-ink-soft"
+                      }`}
+                    >
+                      {earned ? <Icon className="size-5" /> : <Lock className="size-5" />}
+                    </span>
+                    <p className={earned ? "text-ink" : "text-ink-soft"}>
+                      {label}
+                      {!earned && (
+                        <span className="block text-sm text-ink-soft">
+                          Not yet earned
+                        </span>
+                      )}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </section>
 
-            {/* Two Stats: 42 new words & 2 hours learning */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "1rem",
-                marginTop: "1.2rem",
-              }}
-            >
-              <div
-                style={{
-                  backgroundColor: "var(--sky-blue)",
-                  border: "var(--border-soft)",
-                  borderRadius: "20px",
-                  padding: "0.75rem",
-                  textAlign: "center",
-                }}
-              >
-                <div style={{ fontSize: "1.5rem", fontWeight: 900, color: "var(--dark-text)" }}>
-                  42
-                </div>
-                <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--dark-text)" }}>
-                  new words
-                </div>
-              </div>
-
-              <div
-                style={{
-                  backgroundColor: "var(--sunny-yellow)",
-                  border: "var(--border-soft)",
-                  borderRadius: "20px",
-                  padding: "0.75rem",
-                  textAlign: "center",
-                }}
-              >
-                <div style={{ fontSize: "1.5rem", fontWeight: 900, color: "var(--dark-text)" }}>
-                  2 hrs
-                </div>
-                <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--dark-text)" }}>
-                  learning
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Middle Section: "My badges" */}
-        <div
-          style={{
-            backgroundColor: "#FFFFFF",
-            border: "var(--border-thick)",
-            borderRadius: "36px",
-            padding: "2rem 2.25rem",
-            boxShadow: "var(--shadow-playful)",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "1.5rem",
-            }}
-          >
-            <h2
-              style={{
-                fontSize: "1.8rem",
-                fontWeight: 900,
-                color: "var(--dark-text)",
-              }}
-            >
-              My badges 🏆
-            </h2>
-            <span style={{ fontSize: "1rem", fontWeight: 800, color: "var(--coral)" }}>
-              4 of 5 unlocked
-            </span>
-          </div>
-
-          {/* Row of 5 round colorful badges */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
-            {badges.map((b, idx) => (
-              <div
-                key={idx}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  textAlign: "center",
-                  opacity: b.locked ? 0.6 : 1,
-                }}
-              >
-                <div
-                  style={{
-                    width: "82px",
-                    height: "82px",
-                    borderRadius: "50%",
-                    backgroundColor: b.bg,
-                    border: b.locked ? "3px dashed #64748B" : "var(--border-thick)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "2.2rem",
-                    boxShadow: b.locked ? "none" : "0 6px 0 rgba(43, 43, 43, 0.15)",
-                    marginBottom: "0.75rem",
-                  }}
-                >
-                  {b.icon}
-                </div>
-                <div
-                  style={{
-                    fontSize: "1.1rem",
-                    fontWeight: 800,
-                    color: b.locked ? "#64748B" : "var(--dark-text)",
-                  }}
-                >
-                  {b.name}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom Section: "Parent area" Card (Calmer, cleaner, with lock icon) */}
-        <div
-          style={{
-            backgroundColor: "#FFFFFF",
-            border: "var(--border-thick)",
-            borderRadius: "36px",
-            padding: "2.25rem",
-            boxShadow: "var(--shadow-playful)",
-          }}
-        >
-          {/* Header with lock icon and "Parents only" note */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.85rem",
-              paddingBottom: "1.25rem",
-              borderBottom: "2px solid #F1F5F9",
-              marginBottom: "1.75rem",
-            }}
-          >
-            <div
-              style={{
-                width: "42px",
-                height: "42px",
-                borderRadius: "12px",
-                backgroundColor: "#F1F5F9",
-                border: "2px solid #2B2B2B",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "1.25rem",
-              }}
-            >
-              🔒
-            </div>
-            <div>
+            <section aria-labelledby="settings-heading" className="mt-14">
               <h2
-                style={{
-                  fontSize: "1.6rem",
-                  fontWeight: 900,
-                  color: "var(--dark-text)",
-                  lineHeight: 1.15,
-                }}
+                id="settings-heading"
+                className="font-display text-2xl font-bold text-ink"
               >
-                Parent area
+                Limits and preferences
               </h2>
-              <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#64748B" }}>
-                Settings & Safety Controls • Parents only
-              </span>
-            </div>
-          </div>
 
-          {/* Controls Inside Parent Area */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "2.5rem",
-              alignItems: "center",
-            }}
-          >
-            {/* Left Controls: Daily talk limit slider + Weekly email toggle */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
-              {/* Daily talk limit setting with slider */}
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontWeight: 800,
-                    marginBottom: "0.5rem",
-                    fontSize: "1.05rem",
-                  }}
-                >
-                  <label htmlFor="talk-limit-slider" style={{ color: "var(--dark-text)" }}>
-                    Daily talk limit
+              <div className="mt-6 space-y-8 border-t border-shell-edge pt-8">
+                <div>
+                  <label
+                    htmlFor="talk-minutes"
+                    className="flex items-center gap-2 font-display font-semibold text-ink"
+                  >
+                    <Clock className="size-5 text-leaf" />
+                    Daily talk time
                   </label>
-                  <span
-                    style={{
-                      backgroundColor: "var(--sky-blue)",
-                      border: "var(--border-soft)",
-                      padding: "0.2rem 0.8rem",
-                      borderRadius: "9999px",
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    {talkLimit} min
-                  </span>
+                  <p className="mt-1 max-w-measure text-sm text-ink-soft">
+                    A session ends by itself when the time is up, even mid-question.
+                  </p>
+                  <div className="mt-4 flex items-center gap-4">
+                    <input
+                      id="talk-minutes"
+                      type="range"
+                      min={5}
+                      max={30}
+                      step={5}
+                      value={settings.talkMinutes}
+                      onChange={(e) => update({ talkMinutes: Number(e.target.value) })}
+                      className="h-2 w-full max-w-xs cursor-pointer appearance-none rounded-full bg-shell-edge accent-coral"
+                    />
+                    <output
+                      htmlFor="talk-minutes"
+                      className="shrink-0 font-display font-bold text-ink"
+                    >
+                      {settings.talkMinutes} minutes
+                    </output>
+                  </div>
                 </div>
-                <input
-                  id="talk-limit-slider"
-                  type="range"
-                  min="5"
-                  max="30"
-                  step="5"
-                  value={talkLimit}
-                  onChange={(e) => setTalkLimit(Number(e.target.value))}
-                  style={{ width: "100%", accentColor: "var(--coral)", height: "8px", cursor: "pointer" }}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: "0.75rem",
-                    color: "#94A3B8",
-                    fontWeight: 700,
-                    marginTop: "4px",
-                  }}
-                >
-                  <span>5 min</span>
-                  <span>15 min (Recommended)</span>
-                  <span>30 min</span>
-                </div>
-              </div>
 
-              {/* Weekly report by email toggle switched on */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+                <fieldset>
+                  <legend className="flex items-center gap-2 font-display font-semibold text-ink">
+                    <Globe className="size-5 text-leaf" />
+                    Languages to practise
+                  </legend>
+                  <p className="mt-1 max-w-measure text-sm text-ink-soft">
+                    Turn one off to focus on the other. At least one stays on.
+                  </p>
+                  <div className="mt-4 flex gap-6">
+                    {(
+                      [
+                        ["english", "English"],
+                        ["arabic", "Arabic"],
+                      ] as const
+                    ).map(([key, label]) => {
+                      const other = key === "english" ? "arabic" : "english";
+                      return (
+                        <label key={key} className="flex items-center gap-2.5 text-ink">
+                          <input
+                            type="checkbox"
+                            checked={settings[key]}
+                            // The last remaining language cannot be switched off.
+                            disabled={settings[key] && !settings[other]}
+                            onChange={(e) => update({ [key]: e.target.checked })}
+                            className="size-5 accent-coral"
+                          />
+                          {label}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </fieldset>
+
                 <div>
-                  <div style={{ fontWeight: 800, fontSize: "1.05rem", color: "var(--dark-text)" }}>
-                    Weekly report by email
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "#64748B", fontWeight: 600 }}>
-                    Receive Rahal&apos;s vocabulary & math summary every Sunday
-                  </div>
+                  <label className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={settings.weeklyEmail}
+                      onChange={(e) => update({ weeklyEmail: e.target.checked })}
+                      className="mt-1 size-5 shrink-0 accent-coral"
+                    />
+                    <span>
+                      <span className="flex items-center gap-2 font-display font-semibold text-ink">
+                        <Mail className="size-5 text-leaf" />
+                        Email me a weekly summary
+                      </span>
+                      <span className="mt-1 block max-w-measure text-sm text-ink-soft">
+                        What {SAMPLE.childName} practised and where they got stuck.
+                        One email on Sunday, and nothing else.
+                      </span>
+                    </span>
+                  </label>
                 </div>
 
-                {/* Toggle button */}
-                <button
-                  onClick={() => setEmailReport(!emailReport)}
-                  style={{
-                    width: "56px",
-                    height: "32px",
-                    borderRadius: "9999px",
-                    backgroundColor: emailReport ? "var(--mint-green)" : "#CBD5E1",
-                    border: "var(--border-medium)",
-                    position: "relative",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "22px",
-                      height: "22px",
-                      borderRadius: "50%",
-                      backgroundColor: "#FFFFFF",
-                      border: "2px solid #2B2B2B",
-                      position: "absolute",
-                      top: "2px",
-                      left: emailReport ? "27px" : "3px",
-                      transition: "all 0.2s ease",
-                    }}
-                  />
-                </button>
+                <p className="flex items-center gap-2 text-sm text-leaf">
+                  <Check className="size-4" />
+                  Saved
+                </p>
               </div>
-            </div>
+            </section>
 
-            {/* Right Controls: Current plan + Upgrade button + Add another child */}
-            <div
-              style={{
-                backgroundColor: "#F8FAFC",
-                border: "var(--border-medium)",
-                borderRadius: "24px",
-                padding: "1.5rem",
-                display: "flex",
-                flexDirection: "column",
-                gap: "1.25rem",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
+            <section aria-labelledby="data-heading" className="mt-14">
+              <h2
+                id="data-heading"
+                className="font-display text-2xl font-bold text-ink"
               >
-                <div>
-                  <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "#64748B" }}>
-                    CURRENT PLAN
-                  </div>
-                  <div style={{ fontSize: "1.25rem", fontWeight: 900, color: "var(--dark-text)" }}>
-                    Free, baby stage
-                  </div>
-                </div>
-
-                {/* Coral Upgrade Button */}
+                {SAMPLE.childName}&rsquo;s data
+              </h2>
+              <p className="mt-3 max-w-measure leading-relaxed text-ink-soft">
+                You can see everything held about your child and delete all of it,
+                which is the part of COPPA that matters most in practice. Deleting
+                removes the progress, the stars and the companion, and cannot be
+                undone.
+              </p>
+              <div className="mt-5 flex flex-wrap gap-4">
                 <Link
-                  href="/upgrade"
-                  className="btn-pill btn-coral"
-                  style={{
-                    padding: "0.6rem 1.4rem",
-                    fontSize: "1rem",
-                  }}
+                  href="/contact"
+                  className="press press-sm press-shell inline-flex min-h-12 items-center rounded-full border border-shell-edge bg-shell px-6 font-display font-semibold text-ink"
                 >
-                  Upgrade 🚀
+                  Request a copy
+                </Link>
+                <Link
+                  href="/contact"
+                  className="press press-sm press-shell inline-flex min-h-12 items-center rounded-full border border-berry bg-shell px-6 font-display font-semibold text-berry"
+                >
+                  Delete everything
                 </Link>
               </div>
-
-              {/* Text link: Add another child */}
-              <div style={{ borderTop: "1px solid #E2E8F0", paddingTop: "0.85rem", textAlign: "right" }}>
-                <button
-                  onClick={() => alert("👨‍👩‍👧‍👦 Add child feature: Add sibling profile coming soon!")}
-                  style={{
-                    color: "var(--coral)",
-                    fontSize: "0.95rem",
-                    fontWeight: 800,
-                    textDecoration: "underline",
-                  }}
-                >
-                  + Add another child
-                </button>
-              </div>
-            </div>
+            </section>
           </div>
+
+          <aside className="lg:pt-2">
+            <div className="rounded-region border border-shell-edge bg-clay p-6">
+              <CompanionStage
+                src={companion.img}
+                alt={`${companion.name}, a ${companion.species.toLowerCase()}`}
+                size={140}
+                className="mx-auto"
+              />
+              <p className="mt-4 text-center font-display text-xl font-bold text-ink">
+                {companion.name}
+              </p>
+              <p className="text-center text-sm text-ink-soft">
+                {SAMPLE.stage} stage {SAMPLE.level}
+              </p>
+
+              <dl className="mt-5 space-y-3 border-t border-clay-edge pt-5 text-sm">
+                <div className="flex items-start gap-2">
+                  <SubjectIcon
+                    subject={companion.subject}
+                    className="mt-0.5 size-4 shrink-0 text-coral-ink"
+                  />
+                  <div>
+                    <dt className="text-ink-soft">Practises</dt>
+                    <dd className="text-ink">{companion.subjectLabel}</dd>
+                  </div>
+                </div>
+              </dl>
+
+              <Link
+                href="/choose"
+                className="mt-5 inline-block text-sm font-semibold text-coral-ink underline-offset-4 hover:underline"
+              >
+                Switch companion
+              </Link>
+            </div>
+
+            <p className="mt-6 flex gap-2.5 text-sm leading-relaxed text-ink-soft">
+              <Shield className="mt-0.5 size-5 shrink-0 text-leaf" />
+              <span>
+                No ads and no third-party tracking.{" "}
+                <Link
+                  href="/about"
+                  className="font-semibold text-coral-ink underline underline-offset-4"
+                >
+                  What we keep
+                </Link>
+                .
+              </span>
+            </p>
+          </aside>
         </div>
       </div>
-
-      {/* Customize Pip Modal (Optional Interactive Feature) */}
-      {showCustomizeModal && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 100,
-            padding: "1.5rem",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#FFFFFF",
-              border: "var(--border-thick)",
-              borderRadius: "32px",
-              padding: "2rem",
-              maxWidth: "420px",
-              width: "100%",
-              textAlign: "center",
-              boxShadow: "0 10px 0 rgba(0,0,0,0.2)",
-            }}
-          >
-            <h3 style={{ fontSize: "1.75rem", fontWeight: 900, marginBottom: "0.5rem" }}>
-              Customize Your Pip
-            </h3>
-            <p style={{ fontSize: "1rem", fontWeight: 700, color: "#64748B", marginBottom: "1.5rem" }}>
-              Change your pet&apos;s name and style!
-            </p>
-
-            <div style={{ marginBottom: "1.5rem" }}>
-              <Pip size={120} variant="normal" />
-            </div>
-
-            <div style={{ textAlign: "left", marginBottom: "1.5rem" }}>
-              <label style={{ display: "block", fontWeight: 800, marginBottom: "0.4rem" }}>
-                Pet Name:
-              </label>
-              <input
-                type="text"
-                value={petName}
-                onChange={(e) => setPetName(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "0.75rem 1rem",
-                  borderRadius: "16px",
-                  border: "var(--border-medium)",
-                  fontSize: "1.1rem",
-                  fontWeight: 800,
-                  outline: "none",
-                }}
-              />
-            </div>
-
-            <button
-              onClick={() => setShowCustomizeModal(false)}
-              className="btn-pill btn-coral"
-              style={{ width: "100%", padding: "0.8rem" }}
-            >
-              Save Changes
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+    </>
   );
 }

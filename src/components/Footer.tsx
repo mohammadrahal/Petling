@@ -1,89 +1,77 @@
-"use client";
-
 import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+
+const GROUPS = [
+  {
+    heading: "For children",
+    links: [
+      { href: "/choose", label: "Companions" },
+      { href: "/dashboard", label: "Today" },
+      { href: "/talk", label: "Talk" },
+    ],
+  },
+  {
+    heading: "For parents",
+    links: [
+      { href: "/about", label: "How it works" },
+      { href: "/profile", label: "Progress and limits" },
+      { href: "/upgrade", label: "Plans" },
+      { href: "/contact", label: "Get help" },
+    ],
+  },
+];
 
 export default function Footer() {
-  const pathname = usePathname();
-
-  // Hide footer on full-screen voice call (Talk)
-  if (pathname === "/talk") {
-    return null;
-  }
-
   return (
-    <footer className="w-full bg-surface-container-low border-t-2 border-surface-container-high py-8 sm:py-10 px-4 sm:px-gutter mt-auto">
-      <div className="max-w-[1160px] mx-auto flex flex-col gap-7">
-        <div className="flex flex-wrap items-center justify-between gap-6">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-full bg-primary-fixed overflow-hidden flex items-center justify-center transition-transform group-hover:scale-105">
-              <Image
-                src="/characters/logo.png"
-                alt="Petling Logo"
-                width={36}
-                height={36}
-                className="object-contain"
-              />
-            </div>
-            <span className="font-headline font-extrabold text-2xl text-primary-container">
-              Petling
-            </span>
-          </Link>
-
-          {/* Nav Links */}
-          <nav>
-            <ul className="flex flex-wrap items-center gap-5 text-sm font-bold font-headline text-on-surface-variant">
-              <li>
-                <Link href="/" className="hover:text-primary transition-colors">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/choose" className="hover:text-primary transition-colors">
-                  Choose Pet
-                </Link>
-              </li>
-              <li>
-                <Link href="/dashboard" className="hover:text-primary transition-colors">
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link href="/talk" className="hover:text-primary transition-colors">
-                  Talk
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-primary transition-colors">
-                  About
-                </Link>
-              </li>
-            </ul>
-          </nav>
-
-          {/* Safety Badge */}
-          <div className="inline-flex items-center gap-2 bg-surface-container-lowest rounded-full px-4 py-1.5 text-xs font-bold text-mint-dark border border-mint-fixed shadow-sm">
-            <span>🛡️</span>
-            <span>100% Kid Safe & COPPA Certified</span>
+    <footer className="border-t border-shell-edge bg-shell">
+      <div className="mx-auto max-w-shelf px-5 py-12">
+        <div className="flex flex-wrap gap-x-16 gap-y-10">
+          <div className="max-w-xs">
+            <p className="font-display text-xl font-bold text-ink">Petling</p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+              Children practise English and Arabic out loud with a companion that
+              grows as they learn.
+            </p>
           </div>
+
+          {GROUPS.map((group) => (
+            <nav key={group.heading} aria-label={group.heading}>
+              <h2 className="font-display text-base font-semibold text-ink">
+                {group.heading}
+              </h2>
+              <ul className="mt-3 space-y-2">
+                {group.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
         </div>
 
-        {/* Bottom copyright & languages */}
-        <div className="border-t border-surface-container-high pt-5 flex flex-wrap items-center justify-between gap-4 text-xs text-on-surface-variant font-medium">
-          <div>
-            © {new Date().getFullYear()} Petling. Playful learning companions for curious minds.
-          </div>
-          <div className="flex items-center gap-2">
-            <span>Available in:</span>
-            <span className="bg-surface-container-lowest px-2.5 py-0.5 rounded-full font-bold border border-surface-container-high">
-              🇬🇧 English
-            </span>
-            <span className="bg-surface-container-lowest px-2.5 py-0.5 rounded-full font-bold border border-surface-container-high">
-              🌙 Arabic (العربية)
-            </span>
-          </div>
+        {/*
+          Claims a children's product can actually stand behind. COPPA has no
+          certifying body, so the earlier "COPPA Certified" badge was removed
+          rather than reworded.
+        */}
+        <div className="mt-12 flex flex-wrap items-baseline justify-between gap-4 border-t border-shell-edge pt-6">
+          <p className="max-w-measure text-sm leading-relaxed text-ink-soft">
+            No ads and no third-party tracking. Recordings are used to answer the
+            child in the moment and are not kept afterwards. Written to meet
+            COPPA requirements for children under 13 —{" "}
+            <Link href="/about" className="text-coral-ink underline underline-offset-4">
+              read what that means
+            </Link>
+            .
+          </p>
+          <p className="text-sm text-ink-soft">
+            English and <span lang="ar">العربية</span> · © {new Date().getFullYear()} Petling
+          </p>
         </div>
       </div>
     </footer>

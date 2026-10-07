@@ -1,141 +1,141 @@
-# 🐾 Petling — Kids Voice AI Learning Companion
+# Petling
 
-> **A playful, voice-powered bilingual learning app for early learners (Ages 3–8). Practice words, math, and stories in English and Arabic with a 3D companion that hatches and grows with you!**
+A voice-first learning app for children aged 3 to 8. A companion asks a question
+out loud, the child answers out loud, and the companion grows as they practise.
+Questions come in English and Modern Standard Arabic.
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.3.8-black?logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v3-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Kid-Safe](https://img.shields.io/badge/COPPA-Compliant%20%E2%80%A2%20Ad--Free-2e7d32)](https://github.com)
+Built with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS v3.
 
----
+## Running it
 
-## 🌟 What is Petling?
+```bash
+npm install
+npm run dev     # http://localhost:3000
+```
 
-**Petling** turns early learning into a joyful, conversational adventure. Rather than passively tapping buttons, children speak naturally with their personal 3D Petling companion. 
+```bash
+npm run build && npm run start   # production
+npm run lint
+```
 
-As kids practice daily phonics, vocabulary, numbers, and bedtime stories, their Petling companion hatches from a magical egg, levels up, celebrates achievements with strawberry feasts, and unlocks new evolutionary stages.
+Speaking uses the browser's own Web Speech API, so it works in Chrome, Edge and
+Safari. Firefox has no `SpeechRecognition`, and the app says so and falls back to
+tappable answers rather than failing quietly.
 
----
+## What is real and what is not
 
-## ✨ Key Features & What Does It Do?
+There is no backend. Being clear about the line matters, because a few screens
+would otherwise look like they are reporting a real child's progress:
 
-- 🗣️ **Conversational Voice Practice:** Real-time bilingual voice interaction powered by the browser's Web Speech API (`SpeechRecognition` & `SpeechSynthesis`) in both **English** and **Arabic (العربية)**.
-- 🐣 **Hatch & Grow Evolution:** Children start with an egg that hatches into a baby Petling and levels up through daily consistency.
-- 🍓 **Interactive Feeding & Vitals Mini-Game:** Keep your Petling happy by feeding them strawberries earned from completed quests.
-- 🎯 **Daily Micro-Quests:** Phonics adventures, addition safaris (1 to 10), and moral storybooks.
-- 📱 **100% Responsive Design:** Smooth, tactile interface designed for mobile phones, tablets, and desktop displays with an accessible drawer navigation.
-- 🛡️ **Child-Safe by Design:** Zero ads, no public storage of voice recordings, and fully COPPA-compliant parent dashboard.
+| Area | State |
+|---|---|
+| Speech recognition and speech synthesis | Real, via the browser |
+| Choosing a companion | Real, kept in `localStorage` |
+| Daily limit, language and email preferences | Real, kept in `localStorage` |
+| Answer grading, berries, stars within a session | Real, computed client-side |
+| Streaks, word totals, weekly chart, badges | **Sample data.** Each screen says so on the page |
+| `POST /api/contact` | Validates and accepts, but no mail provider is wired, so it reports `delivered: false` |
+| Plan checkout | Not connected. The button says so instead of claiming success |
 
----
+## Routes
 
-## 🐾 Meet the Petling Universe
+Everything except `/talk` renders inside the `(site)` route group, which supplies
+the header and footer. `/talk` sits outside it so it can run full-screen.
 
-| Character | Species | Specialty | Favorite Treat | Personality |
-|:---:|:---:|:---:|:---:|:---:|
-| **Pip** | Coral Bear | Storytelling & Early Vocabulary | Sweet Strawberries 🍓 | Warm, Encouraging, Curious |
-| **Momo** | Baby Dinosaur | Math Safari & Logic Puzzles | Juicy Watermelons 🍉 | Adventurous, Brave, Energetic |
-| **Zuzu** | Star Alien | Bilingual Phonics & Science | Glowing Star Apples 🍏 | Inventive, Playful, Quick-witted |
-| **Lulu** | Sunny Owl | Rhymes, Poetry & Reading | Golden Honey Puffs 🍯 | Wise, Cheerful, Bubbly |
-| **Bumble** | Cloud Bee | Music & Alphabet Rhythm | Sweet Clover Dew 🌼 | Bouncy, Joyful, Musical |
-| **Toby** | Peaceful Otter | Calm Mind & Patient Listening | River Berries 🫐 | Gentle, Soulful, Patient |
+| Route | For | What it does |
+|---|---|---|
+| `/` | Parents arriving | What the app is, shown as one real exchange |
+| `/choose` | Children | Pick a companion, hear them in either language |
+| `/dashboard` | Children | The companion's state, feeding, today's three tasks |
+| `/talk` | Children | The session itself: ask, answer, grade, grow |
+| `/about` | Parents | How a session works, and what is and isn't collected |
+| `/profile` | Parents | Progress, and the daily limit and language controls |
+| `/upgrade` | Parents | Free and Family plans compared |
+| `/contact` | Parents | Support form and the questions parents actually ask |
 
----
-
-## 🚀 Application Screens
-
-- **🏡 Home (`/`)**: Hero mascot showcase with animated tactile aura, value proposition cards, quick audio launcher, and character directory.
-- **🐾 Choose Pet (`/choose`)**: Interactive companion selection stage with live voice pitch previews and personality dossiers.
-- **🌟 Dashboard (`/dashboard`)**: Daily command center with pet mood status, strawberry feeding mini-game, growth progress bars, and daily learning quests.
-- **💬 Talk HUD (`/talk`)**: Immersive full-screen voice call HUD with live waveform visualizer, prompt cues, hint helpers, and interactive speech recognition.
-- **💡 About & Safety (`/about`)**: Explains the 3-step hatch-and-grow methodology and our commitment to children's digital privacy.
-- **👤 Profile (`/profile`)**: Weekly learning summaries, streak calendar, audio time limit controls, and parent settings.
-- **⭐ Upgrade (`/upgrade`)**: Milestone celebrations and full conversational speech unlock tiers.
-
----
-
-## 🛠️ Technology Stack
-
-| Layer | Technology | Details |
-|:---|:---|:---|
-| **Framework** | **Next.js 16.3.8** | App Router, Turbopack, React 19 Server & Client Components |
-| **Language** | **TypeScript 5.x** | Fully typed interfaces, props, and buddy definitions |
-| **Styling** | **Tailwind CSS v3** | Custom tactile color tokens, pill shapes, 3D button shadows |
-| **Design System** | **Stitch AI Tokens** | Palette tokens (`primary-container #f28b6b`, `surface #fcf9f8`, `mint #7BC67B`, `lavender #B79CFF`) |
-| **Typography** | **Google Fonts** | `Rubik` (Chunky playful headlines) & `Quicksand` (Friendly readable body text) |
-| **Voice & Speech** | **Web Speech API** | `SpeechRecognition` / `webkitSpeechRecognition` & `speechSynthesis` |
-| **Assets & Icons** | **Vector SVGs & 3D Renders** | Bespoke hand-crafted SVG icon components and optimized 3D mascot sprites |
-
----
-
-## 📁 Project Directory Structure
+## Layout
 
 ```text
-petling/
-├── public/
-│   └── characters/           # 3D mascot artwork (pip, momo, zuzu, lulu, bumble, toby, egg, logo)
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx        # Root HTML layout with Google Fonts & global Navbar/Footer
-│   │   ├── globals.css       # Core typography, keyframe animations & Tailwind directives
-│   │   ├── page.tsx          # Screen 1: Home page & hero
-│   │   ├── choose/page.tsx   # Screen 2: Choose Petling & voice preview
-│   │   ├── dashboard/page.tsx# Screen 3: Dashboard & strawberry feeding
-│   │   ├── talk/page.tsx     # Screen 4: Voice talk HUD & audio visualizer
-│   │   ├── about/page.tsx    # Screen 5: About & 100% kid-safety guide
-│   │   ├── profile/page.tsx  # Screen 6: Parent settings & learner profile
-│   │   └── upgrade/page.tsx  # Screen 7: Evolutionary tier unlock
-│   └── components/
-│       ├── Navbar.tsx        # Responsive header with mobile hamburger drawer
-│       ├── Footer.tsx        # Kid-safe badges, language tags & footer nav
-│       └── Icons.tsx         # Clean vector SVG icons (Mic, Volume, Check, Menu, Close, etc.)
-├── tailwind.config.ts        # Custom tactile color palette & typography tokens
-├── postcss.config.mjs        # PostCSS configuration
-└── package.json              # Project scripts & dependencies
+src/
+├── app/
+│   ├── layout.tsx            # fonts, metadata; no site chrome
+│   ├── globals.css           # base layer, the .press device, reduced motion
+│   ├── (site)/
+│   │   ├── layout.tsx        # header + footer
+│   │   └── …                 # the seven site routes
+│   ├── talk/page.tsx         # full-screen session
+│   └── api/contact/route.ts  # server-side validation
+├── components/
+│   ├── Navbar.tsx            # split by audience: children, then parents
+│   ├── Footer.tsx
+│   ├── ParentNav.tsx         # sub-nav for the four parent pages
+│   ├── CompanionStage.tsx    # the lit disc a companion stands in
+│   ├── SubjectIcon.tsx       # subject → icon
+│   └── Icons.tsx             # 27 icons, one grid, one stroke weight
+└── lib/
+    ├── companions.ts         # the six companions (server-safe)
+    ├── companion-store.ts    # the stored selection and settings
+    └── store.ts              # localStorage via useSyncExternalStore
 ```
 
----
+## Design system
 
-## ⚡ Getting Started
+The rules are short enough to keep in your head, and they are what stop the UI
+drifting back into a pile of identical rounded cards.
 
-### 1. Prerequisites
-- **Node.js** 18.17+ or 20+
-- **npm**, **pnpm**, or **yarn**
+**Colour carries a role, never decoration.** Six families in
+`tailwind.config.ts`:
 
-### 2. Installation
-Clone the repository and install dependencies:
+| Token | Means |
+|---|---|
+| `coral` | Act on this. Buttons, the mic, the one thing to press |
+| `sun` | Alive. The light a companion sits in; rewards |
+| `leaf` | Progress. Done, correct, growing |
+| `berry` | Spend or take care. Treats, and warnings for parents |
+| `ink` / `ink-soft` | All type. One colour at two strengths |
+| `shell` / `clay` | The two grounds: `shell` reads, `clay` plays |
 
-```bash
-git clone https://github.com/mohammadrahal/petling.git
-cd petling
-npm install
-```
+Companions have no colour of their own on purpose. Six identity colours would
+leave colour meaning nothing, so they are told apart by their portrait and their
+subject.
 
-### 3. Run the Development Server
-```bash
-npm run dev
-```
+Text on a `coral` fill is `ink`, not white — 4.99:1 against 3.05:1 — which also
+lets the coral stay bright instead of darkening to carry white text. The chart on
+`/profile` uses `leaf-mark`, a step apart from `leaf`, because a chart fill and a
+text colour answer to different checks: one needs chroma, the other contrast.
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+**Type.** `Baloo Bhaijaan 2` for display, because it covers Latin *and* Arabic,
+so a bilingual line keeps one voice; `Lexend` for body, which was drawn to
+improve reading proficiency in young readers. Both self-hosted through
+`next/font`. Weight carries information: display 800, heading 700, emphasis 600,
+body 400.
 
-### 4. Build for Production
-To generate an optimized production bundle:
+**Shadow means pressable.** There is one shadow in the app — the hard offset in
+the `.press` class — and it appears only under things you can press. Content
+regions are separated by hairline rules and ground colour, not by floating boxes.
 
-```bash
-npm run build
-npm run start
-```
+**Icons are drawn, never emoji.** Emoji render differently per platform, carry no
+stroke relationship to the type, and are announced by screen readers as their
+CLDR name. `Icons.tsx` holds the set.
 
----
+**Motion.** Only the companion moves without being asked, and only as a slow
+breath. Everything else moves in response to a person, and
+`prefers-reduced-motion` is respected.
 
-## 🔒 Child Safety & Privacy Commitment
+## Accessibility
 
-- 🚫 **No Advertisements:** Zero third-party behavioral tracking or advertisements.
-- 🛡️ **COPPA & GDPR-K Compliant:** Explicit parental gate for all account management and external settings.
-- 🎙️ **On-Device Audio Handling:** Interactive voice recognition is handled through browser APIs without permanently saving raw voice snippets.
+Skip link; one focus ring; labelled form controls with server-matched validation
+and errors tied via `aria-describedby`; `aria-live` for answers, feeding and form
+results; the weekly chart has a table view; `lang="ar"` on every Arabic string so
+it is announced in the right language. Text meets WCAG AA at its size.
 
----
+## Not wired up
 
-## 📄 License
+- `public/assets/` — 18 unreferenced PNGs from the original generation pass,
+  still publicly served. `public/characters/` holds the nine images actually used.
+- `stitch_html/`, `stitch_screens.json` — the design-tool export the first pass
+  was built from. Kept as reference; nothing imports them.
 
-This project is licensed under the [MIT License](LICENSE).
+## Licence
+
+MIT.

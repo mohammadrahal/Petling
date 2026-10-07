@@ -1,82 +1,92 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Six colour families, each with the variants it actually needs.
+ *
+ * Roles, not decoration:
+ *   coral — "act on this". Buttons, the mic, the one thing to press. Text on a
+ *           coral fill is `ink`, not white: 4.99:1 rather than 3.05:1, and it
+ *           lets the coral stay bright instead of darkening to carry white.
+ *   sun   — "alive". The light the companion sits in; rewards.
+ *   leaf  — "progress". Completed, correct, growing.
+ *   berry — "careful". Treats the child spends, and parent-facing warnings.
+ *   ink   — all type. One colour, two weights of it.
+ *   shell / clay — the two grounds. shell reads (parents), clay plays (children).
+ */
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        "primary": "#99462b",
-        "primary-container": "#f28b6b",
-        "primary-fixed": "#ffdbd0",
-        "primary-fixed-dim": "#ffb59e",
-        "on-primary": "#ffffff",
-        "on-primary-container": "#6c250c",
-        "on-primary-fixed": "#3a0a00",
-        "on-primary-fixed-variant": "#7a2f16",
+        shell: "#fbf6ef",
+        "shell-edge": "#eadcca",
+        clay: "#f3e6d7",
+        "clay-edge": "#e4d0b8",
 
-        "secondary": "#00658f",
-        "secondary-container": "#86cfff",
-        "secondary-fixed": "#c7e7ff",
-        "secondary-fixed-dim": "#86cfff",
-        "on-secondary": "#ffffff",
-        "on-secondary-container": "#00587d",
-        "on-secondary-fixed": "#001e2e",
-        "on-secondary-fixed-variant": "#004c6d",
+        ink: "#2e1b12",
+        "ink-soft": "#6b5347",
 
-        "tertiary": "#725c00",
-        "tertiary-container": "#ffd95a",
-        "tertiary-fixed": "#ffe081",
-        "tertiary-fixed-dim": "#e8c346",
-        "on-tertiary": "#ffffff",
-        "on-tertiary-container": "#493a00",
-        "on-tertiary-fixed": "#231b00",
-        "on-tertiary-fixed-variant": "#564500",
+        coral: "#e8663c",
+        "coral-ink": "#b23e18",
+        "coral-deep": "#a8391a",
+        "coral-wash": "#fbe0d4",
 
-        "mint": "#7BC67B",
-        "mint-dark": "#2e7d32",
-        "mint-fixed": "#d6f5d6",
-        "teal-petling": "#64DFDF",
-        "lavender": "#B79CFF",
-        "lavender-fixed": "#EDE7FF",
+        leaf: "#376e45",
+        "leaf-deep": "#26502f",
+        "leaf-wash": "#dfebe0",
+        // Chart marks only. A fill and a text colour answer to different
+        // checks: this step clears the chroma floor a bar needs, while `leaf`
+        // above clears the contrast ratio text needs.
+        "leaf-mark": "#2f8a4f",
 
-        "surface": "#fcf9f8",
-        "background": "#fcf9f8",
-        "surface-container-lowest": "#ffffff",
-        "surface-container-low": "#f6f3f2",
-        "surface-container": "#f0eded",
-        "surface-container-high": "#eae7e7",
-        "surface-container-highest": "#e4e2e1",
-        "on-surface": "#1b1c1c",
-        "on-surface-variant": "#55433d",
-        "outline": "#88726c",
-        "outline-variant": "#dbc1ba",
-        "error": "#ba1a1a",
-        "on-error": "#ffffff",
+        sun: "#f0b429",
+        "sun-deep": "#b8840d",
+        "sun-wash": "#fbe9be",
+
+        berry: "#c8384f",
+        "berry-wash": "#fadde2",
       },
+
       fontFamily: {
-        headline: ["Rubik", "sans-serif"],
-        body: ["Quicksand", "sans-serif"],
+        // Baloo Bhaijaan 2 carries Latin and Arabic, so bilingual strings
+        // never fall back mid-sentence.
+        display: ["var(--font-display)", "system-ui", "sans-serif"],
+        body: ["var(--font-body)", "var(--font-display)", "system-ui", "sans-serif"],
       },
-      spacing: {
-        "space-xs": "0.5rem",
-        "space-sm": "0.75rem",
-        "space-md": "1.25rem",
-        "space-lg": "2rem",
-        "space-xl": "3rem",
-        "gutter": "1.5rem",
-        "gutter-sm": "1rem",
+
+      // Minor third (1.2) through the text sizes, wider jumps at display
+      // sizes so a headline is unmistakably a headline.
+      fontSize: {
+        xs: ["0.75rem", { lineHeight: "1.4" }],
+        sm: ["0.875rem", { lineHeight: "1.5" }],
+        base: ["1rem", { lineHeight: "1.6" }],
+        lg: ["1.125rem", { lineHeight: "1.6" }],
+        xl: ["1.375rem", { lineHeight: "1.45" }],
+        "2xl": ["1.75rem", { lineHeight: "1.25", letterSpacing: "-0.01em" }],
+        "3xl": ["2.25rem", { lineHeight: "1.15", letterSpacing: "-0.015em" }],
+        "4xl": ["3rem", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
+        "5xl": ["4rem", { lineHeight: "1", letterSpacing: "-0.025em" }],
       },
+
+      maxWidth: {
+        // Reading measure. Body copy never runs wider than this.
+        measure: "68ch",
+        shelf: "72rem",
+      },
+
+      borderRadius: {
+        // One radius for content regions. Pressable things use rounded-full.
+        region: "1rem",
+      },
+
       boxShadow: {
-        "tactile-primary": "0 6px 0 #99462b",
-        "tactile-primary-hover": "0 4px 0 #99462b",
-        "tactile-secondary": "0 5px 0 #004c6d",
-        "tactile-secondary-hover": "0 3px 0 #004c6d",
-        "tactile-surface": "0 6px 0 #dbc1ba",
-        "tactile-surface-hover": "0 4px 0 #dbc1ba",
+        // The only shadow in the system. It means "you can press this".
+        press: "0 5px 0 var(--press-shade)",
+        "press-sm": "0 3px 0 var(--press-shade)",
+        "press-held": "0 2px 0 var(--press-shade)",
       },
     },
   },
